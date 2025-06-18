@@ -147,7 +147,7 @@ class DAttentionBaseline(nn.Module):
         return out, pos.reshape(B, self.n_groups, Hk, Wk, 2), reference.reshape(B, self.n_groups, Hk, Wk, 2)
 
 
-class MultiFeatureInteraction(nn.Module):
+class MAFI(nn.Module):
     def __init__(self, q_size, kv_size, n_heads, n_head_channels, n_group_channels,
                     attn_drop, proj_drop, position_block='down'):
         super().__init__()

@@ -1,3 +1,3 @@
 from .connect_unet import UNet
-from .multi_feature_interaction import MultiFeatureInteraction
+from .MAFI import MAFI
 from .skelet_block import SkeletDownBlock, SkeletUpBlock, SkeletMidBlock

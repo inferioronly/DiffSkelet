@@ -56,11 +56,11 @@ class DiffSkeletDataset(Dataset):
         morph = cv2.morphologyEx(smoothed, cv2.MORPH_OPEN, kernel)
 
         # 2) Skeletonize
-        binary_bool = img_as_bool(morph)          # True = 前景
+        binary_bool = img_as_bool(morph)
         skel = skeletonize(binary_bool)
         skel_uint8 = (skel * 255).astype(np.uint8)
 
-        # 3) 反色，让前景为白色（与你原脚本一致）
+        # 3) 反转
         return cv2.bitwise_not(skel_uint8)
 
     def __getitem__(self, index: int):

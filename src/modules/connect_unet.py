@@ -11,7 +11,7 @@ from diffusers.utils import BaseOutput, logging
 from .embeddings import TimestepEmbedding, Timesteps
 from .unet_blocks import (DownBlock2D, UNetMidSkeletBlock2D, UpBlock2D, get_down_block, get_up_block)
 from .skelet_block import SkeletDownBlock, SkeletUpBlock, SkeletMidBlock
-from .multi_feature_interaction import MultiFeatureInteraction
+from .MAFI import MAFI
 
 logger = logging.get_logger(__name__)
 
@@ -67,13 +67,13 @@ class UNet(ModelMixin, ConfigMixin):
                                            if i == 0 else 
                                            SkeletDownBlock(64*(2**(i-1)), 64*(2**i), temb_channels=time_embed_dim, resnet_eps=norm_eps, resnet_act_fn=act_fn, resnet_groups=norm_num_groups, use_pooling=True))
             if i == 1 or i == 2:
-                self.feature_interaction_down.append(MultiFeatureInteraction((32//i, 32//i), 8, 4*i, 32, 32, 0.1, 0.1, position_block='down'))
+                self.feature_interaction_down.append(MAFI((32//i, 32//i), 8, 4*i, 32, 32, 0.1, 0.1, position_block='down'))
 
         # mid
         self.mid_block = UNetMidSkeletBlock2D(in_channels=block_out_channels[-1], temb_channels=time_embed_dim, channel_attn=channel_attn, resnet_eps=norm_eps,
                                            resnet_act_fn=act_fn, resnet_time_scale_shift="default", resnet_groups=norm_num_groups, reduction=reduction)
         self.skelet_mid_block = SkeletMidBlock(512, temb_channels=time_embed_dim, resnet_eps=norm_eps, resnet_act_fn=act_fn, resnet_groups=norm_num_groups)
-        self.feature_interaction_mid = (MultiFeatureInteraction((16, 16), 8, 16, 32, 32, 0.1, 0.1, position_block='mid'))
+        self.feature_interaction_mid = (MAFI((16, 16), 8, 16, 32, 32, 0.1, 0.1, position_block='mid'))
 
         # count how many layers upsample the images
         self.num_upsamplers = 0
@@ -105,7 +105,7 @@ class UNet(ModelMixin, ConfigMixin):
                                          if i == 0 else
                                          SkeletUpBlock(512//(2**(i-1)), 512//(2**i), temb_channels=time_embed_dim, resnet_eps=norm_eps, resnet_act_fn=act_fn, resnet_groups=norm_num_groups, use_up=True))
             if i == 1 or i == 2:
-                self.feature_interaction_up.append(MultiFeatureInteraction((64*i, 64*i), 8, 8//i, 32, 32, 0.1, 0.1, position_block='up'))
+                self.feature_interaction_up.append(MAFI((64*i, 64*i), 8, 8//i, 32, 32, 0.1, 0.1, position_block='up'))
 
         # out
         self.conv_norm_out = nn.GroupNorm(num_channels=block_out_channels[0], num_groups=norm_num_groups, eps=norm_eps)
