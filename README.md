@@ -1,6 +1,6 @@
 **DiffSkelet: Diffusion-based Skeleton-guided Chinese Ancient Character Restoration with a New Dataset**
 
-WSC41K dataset [link](https://drive.google.com/file/d/1LPwoo3JpIKv9MnKdOCnAxiH8bl8vEJrc/view?usp=sharing)
+WSC41K dataset [link](https://drive.google.com/file/d/10ihnTF0NqfBUh7N_OOvNn8HxhZJSAaSx/view?usp=drive_link)
 
 DiffSkelet checkpoint [link](https://drive.google.com/file/d/1sWl0zCs_5CdPTVI_M_GUFYEXeymQe0Bp/view?usp=drive_link)
 
